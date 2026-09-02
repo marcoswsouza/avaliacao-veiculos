@@ -2,9 +2,10 @@
 Sistema de Avaliação de Veículos
 Autor: Marcos Souza
 
-Programa que cadastra veículos com dados técnicos (ano, quilometragem
-e estado de conservação) e calcula uma nota de avaliação (score de 0
-a 100) para cada um.
+Programa que cadastra veículos com dados técnicos (ano, quilometragem,
+estado de conservação e histórico de acidentes) e calcula uma nota de
+avaliação (score de 0 a 100) para cada um, seguindo critérios simples,
+parecido com o que é feito em uma vistoria real.
 """
 
 import json
@@ -58,6 +59,7 @@ def calcular_score(ano, km, estado_conservacao, gravidade_acidente):
     multiplicador = 0.6 + (estado_conservacao - 1) * 0.1
     score = score * multiplicador
 
+    # Garante que o score fique entre 0 e 100
     score = max(0, min(100, score))
     return round(score, 1)
 
@@ -147,9 +149,10 @@ def listar_veiculos(veiculos):
 
     print("\n--- VEÍCULOS AVALIADOS ---")
     for indice, veiculo in enumerate(veiculos, start=1):
+        km_formatado = f"{int(veiculo['km']):,}".replace(",", ".")
         print(
             f"{indice}. {veiculo['marca']} {veiculo['modelo']} ({veiculo['ano']}) "
-            f"- {veiculo['km']} km - Score: {veiculo['score']}/100 ({veiculo['classificacao']})"
+            f"- {km_formatado} km - Score: {veiculo['score']}/100 ({veiculo['classificacao']})"
         )
 
 
