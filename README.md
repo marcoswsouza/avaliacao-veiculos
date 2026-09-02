@@ -2,7 +2,7 @@
 
 Programa em Python de linha de comando que cadastra veículos e calcula
 uma nota de avaliação (score de 0 a 100) para cada um, seguindo
-critérios simples — parecido com o que é feito em uma vistoria real.
+critérios simples, parecido com o que é feito em uma vistoria real.
 
 ## Dados cadastrados por veículo
 
@@ -17,17 +17,17 @@ critérios simples — parecido com o que é feito em uma vistoria real.
 
 O score começa em 100 pontos e sofre descontos:
 
-| Fator                        | Desconto |
-|-------------------------------|----------|
+| Fator                          | Desconto |
+|--------------------------------|----------|
 | Idade do veículo               | 1 ponto a cada 3 anos completos |
 | Quilometragem                  | 1 ponto a cada 15.000 km completos rodados |
 | Histórico de acidentes         | 0 (nenhum) / 5 (leve) / 15 (moderado) / 30 (grave) |
 
-Depois desses descontos, o **estado de conservação** (1 a 5) entra
+Depois desses descontos, o estado de conservação (1 a 5) entra
 como um multiplicador sobre o score:
 
 | Nota | Multiplicador | Desconto |
-|------|----------------|----------
+|----------------------------------
 | 5 - Excelente | 1.0 | 0% |
 | 4 - Bom       | 0.9 | 10% |
 | 3 - Regular   | 0.8 | 20% |
