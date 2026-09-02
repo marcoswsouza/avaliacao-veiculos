@@ -27,7 +27,15 @@ def salvar_veiculos(veiculos):
         json.dump(veiculos, arquivo, ensure_ascii=False, indent=2)
 
 
-def calcular_score(ano, km, estado_conservacao, teve_acidente):
+DESCONTO_POR_GRAVIDADE = {
+    0: 0,   # Nenhum acidente
+    1: 5,   # Leve
+    2: 15,  # Moderado
+    3: 30,  # Grave
+}
+
+
+def calcular_score(ano, km, estado_conservacao, gravidade_acidente):
     """
     Calcula uma nota de 0 a 100 para o veículo.
 
@@ -35,15 +43,14 @@ def calcular_score(ano, km, estado_conservacao, teve_acidente):
     - Começa com 100 pontos
     - Perde 1 ponto a cada 3 anos completos de idade do veículo
     - Perde 1 ponto a cada 15.000 km completos rodados
-    - Perde 10 pontos se já teve algum acidente
     - O estado de conservação (1 a 5) funciona como um multiplicador
+    - Perde pontos conforme a gravidade do acidente (0, 5, 15 ou 30 pontos)
     """
     idade = ANO_ATUAL - ano
     score = 100
     score -= idade // 3
     score -= km // 15000
-    if teve_acidente:
-        score -= 10
+    score -= DESCONTO_POR_GRAVIDADE[gravidade_acidente]
 
     # Estado de conservação 1 (ruim) a 5 (excelente) atua como multiplicador.
     # Cada nota abaixo da máxima desconta 10% do score (nota 5 = 100%, nota 1 = 60%),
@@ -79,8 +86,15 @@ def cadastrar_veiculo(veiculos):
         print("\nValor inválido. Cadastro cancelado.")
         return
 
+    print("\nEstado de conservação:")
+    print("1 - Péssimo (pintura/lataria danificada, estofados rasgados, ruídos mecânicos, pneus carecas)")
+    print("2 - Ruim (desgaste visível na pintura ou lataria, estofados manchados/gastos, manutenção atrasada)")
+    print("3 - Regular (riscos e desgaste natural do uso, mecânica ok mas precisa de atenção em breve)")
+    print("4 - Bom (pintura e lataria conservadas, interior limpo e sem danos, mecânica e revisões em dia)")
+    print("5 - Excelente (sem avarias visíveis, pintura original, interior impecável, revisões todas em dia)")
+
     try:
-        estado_conservacao = int(input("Estado de conservação (1 a 5): "))
+        estado_conservacao = int(input("Escolha o estado de conservação (1 a 5): "))
     except ValueError:
         print("\nValor inválido. Cadastro cancelado.")
         return
@@ -89,10 +103,23 @@ def cadastrar_veiculo(veiculos):
         print("\nEstado de conservação deve ser entre 1 e 5. Cadastro cancelado.")
         return
 
-    resposta_acidente = input("Já teve algum acidente? (s/n): ").strip().lower()
-    teve_acidente = resposta_acidente == "s"
+    print("\nHistórico de acidentes:")
+    print("0 - Nenhum acidente")
+    print("1 - Leve (arranhões, pequenos amassados, sem troca de peça estrutural)")
+    print("2 - Moderado (colisão com troca de peças, sem dano estrutural)")
+    print("3 - Grave (dano estrutural, air bag acionado, perda total registrada)")
 
-    score = calcular_score(ano, km, estado_conservacao, teve_acidente)
+    try:
+        gravidade_acidente = int(input("Escolha o nível (0 a 3): "))
+    except ValueError:
+        print("\nValor inválido. Cadastro cancelado.")
+        return
+
+    if gravidade_acidente not in DESCONTO_POR_GRAVIDADE:
+        print("\nNível de acidente deve ser entre 0 e 3. Cadastro cancelado.")
+        return
+
+    score = calcular_score(ano, km, estado_conservacao, gravidade_acidente)
     classificacao = classificar_score(score)
 
     veiculo = {
@@ -101,7 +128,7 @@ def cadastrar_veiculo(veiculos):
         "ano": ano,
         "km": km,
         "estado_conservacao": estado_conservacao,
-        "teve_acidente": teve_acidente,
+        "gravidade_acidente": gravidade_acidente,
         "score": score,
         "classificacao": classificacao,
         "avaliado_em": datetime.now().strftime("%d/%m/%Y %H:%M"),
