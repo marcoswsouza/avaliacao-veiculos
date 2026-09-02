@@ -27,7 +27,7 @@ Depois desses descontos, o **estado de conservação** (1 a 5) entra
 como um multiplicador sobre o score:
 
 | Nota | Multiplicador | Desconto |
-|------|----------------|----------|
+|------|----------------|----------
 | 5 - Excelente | 1.0 | 0% |
 | 4 - Bom       | 0.9 | 10% |
 | 3 - Regular   | 0.8 | 20% |
@@ -38,12 +38,12 @@ O score final fica sempre entre 0 e 100.
 
 ## Classificação final
 
-| Score      | Classificação |
-|------------|----------------|
-| 80 - 100   | Excelente      |
-| 60 - 79    | Bom            |
-| 40 - 59    | Regular        |
-| 0 - 39     | Ruim           |
+ Score      | Classificação 
+----------------------------
+ 80 - 100    Excelente      
+ 60 - 79     Bom            
+ 40 - 59     Regular        
+ 0 - 39      Ruim           
 
 ## Como rodar
 
