@@ -37,7 +37,6 @@ def calcular_score(ano, km, estado_conservacao, teve_acidente):
     - Perde 1 ponto a cada 15.000 km completos rodados
     - Perde 10 pontos se já teve algum acidente
     - O estado de conservação (1 a 5) funciona como um multiplicador
-      direto (nota / 5)
     """
     idade = ANO_ATUAL - ano
     score = 100
@@ -46,7 +45,10 @@ def calcular_score(ano, km, estado_conservacao, teve_acidente):
     if teve_acidente:
         score -= 10
 
-    multiplicador = estado_conservacao / 5
+    # Estado de conservação 1 (ruim) a 5 (excelente) atua como multiplicador.
+    # Cada nota abaixo da máxima desconta 10% do score (nota 5 = 100%, nota 1 = 60%),
+    # em vez de uma proporção direta (que penalizava demais notas intermediárias).
+    multiplicador = 0.6 + (estado_conservacao - 1) * 0.1
     score = score * multiplicador
 
     score = max(0, min(100, score))
